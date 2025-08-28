@@ -1,0 +1,58 @@
+# Build folders
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+*.sln
+*.vcxproj*
+*.user
+*.obj
+*.o
+*.exe
+*.log
+*.ilk
+*.pdb
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.sdf
+*.opensdf
+*.tlog
+*.lastbuildstate
+*.db
+*.VC.db
+*.VC.VC.opendb
+
+# Compiled source
+*.out
+*.class
+*.dll
+*.lib
+*.a
+*.so
+*.dylib
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Engine assets build output
+engine/build/
+engine/assets/
+
+# External dependencies (if built)
+external/**/build/
+external/**/CMakeFiles/
+external/**/CMakeCache.txt
+external/**/cmake_install.cmake
