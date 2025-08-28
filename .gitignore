@@ -56,3 +56,14 @@ external/**/build/
 external/**/CMakeFiles/
 external/**/CMakeCache.txt
 external/**/cmake_install.cmake
+
+# Ignore all build output in engine/src/CMakeFiles
+engine/src/CMakeFiles/
+
+# Ignore all object files in engine/src
+engine/src/*.obj
+
+# Ignore all object files in engine/build
+engine/build/*.obj
+
+engine/external/glm/

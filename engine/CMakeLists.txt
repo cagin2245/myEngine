@@ -20,6 +20,8 @@ set(SOURCES
     src/Renderer.cpp
     src/Shader.cpp
     src/Window.cpp
+    src/Texture.cpp
+    src/Sprite.cpp
 )
 
 add_executable(engine ${SOURCES})
