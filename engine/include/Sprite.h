@@ -6,11 +6,42 @@
 class Sprite {
 public:
     Sprite(Texture* texture, glm::vec2 position, glm::vec2 size);
-    void draw(const Shader& shader);
+    void draw(Shader& shader, const glm::mat4& projection);
+    
+
+    void setPosition(const glm::vec2& pos) { position = pos; }
+    void setSize(const glm::vec2& s) { size = s; }
+    void setRotation(float angle) { /* Implement rotation if needed */ }
+    void setTexture(Texture* tex) { texture = tex; }
+    void setColor(const glm::vec4& color) { /* Implement color modulation if needed */ }
+    void setTexCoords(const glm::vec4& coords) { /* Implement texture coordinate adjustment if needed */ }
+    void setFlip(bool flipX, bool flipY) { /* Implement flipping if needed */ }
+    void setAlpha(float alpha) { /* Implement alpha blending if needed */ }
+    void setLayer(int layer) { /* Implement layering if needed */ }
+    void setVisible(bool visible) { /* Implement visibility if needed */ }
+    void setAnchorPoint(const glm::vec2& anchor) { /* Implement anchor point if needed */ }
+    void setTiling(const glm::vec2& tiling) { /* Implement texture tiling if needed */ }
+    void setOffset(const glm::vec2& offset) { /* Implement texture offset if needed */ }
+    void setWrapMode(int mode) { /* Implement wrap mode if needed */ }
+    void setFilterMode(int mode) { /* Implement filter mode if needed */ }
+    void setMipmaps(bool mipmaps) { /* Implement mipmap generation if needed */ }
+
+    glm::vec2 getPosition() const { return position; }
+    glm::vec2 getSize() const { return size; }
+    float getRotation() const { return 0.0f; /* Implement if needed */ }
+    Texture* getTexture() const { return texture; }
+    glm::vec4 getColor() const { return glm::vec4(1.0f); /* Implement if needed */ }
+    glm::vec4 getTexCoords() const { return glm::vec4(0.0f); /* Implement if needed */ }
+    bool isVisible() const { return true; /* Implement if needed */ }
+
+    
 
 private:
     Texture* texture;
     glm::vec2 position;
     glm::vec2 size;
+    float rotation;
     GLuint VAO, VBO;
+
+    void initRenderData();
 };
