@@ -1,6 +1,7 @@
+#include <SDL2/SDL.h>
+#include <glad/glad.h>
 #include "Window.h"
 #include <iostream>
-#include <glad/glad.h>
 
 Window::Window(const char* title, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -36,7 +37,10 @@ Window::Window(const char* title, int width, int height) {
         return;
     }
 
+    
+    #ifdef ENGINE_DEV_MODE
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+    #endif
 }
 
 Window::~Window() {

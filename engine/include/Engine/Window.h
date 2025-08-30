@@ -1,5 +1,10 @@
 #pragma once
-#include <SDL2/SDL.h>
+
+#pragma once
+
+// SDL forward declarations
+struct SDL_Window;
+typedef void* SDL_GLContext;
 
 class Window {
 public:

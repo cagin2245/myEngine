@@ -1,7 +1,8 @@
+#include <glad/glad.h>
 #include "Shader.h"
+#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
     std::string vCode = loadSource(vertexPath);
@@ -20,7 +21,9 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
     if (!success) {
         char infoLog[512];
         glGetProgramInfoLog(ID, 512, nullptr, infoLog);
+#ifdef ENGINE_DEV_MODE
         std::cerr << "Shader link error:\n" << infoLog << std::endl;
+#endif
     }
 
     glDeleteShader(vShader);
@@ -53,7 +56,9 @@ GLuint Shader::compileShader(GLenum type, const std::string& source) {
     if (!success) {
         char infoLog[512];
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+#ifdef ENGINE_DEV_MODE
         std::cerr << "Shader compile error:\n" << infoLog << std::endl;
+#endif
     }
     return shader;
 }

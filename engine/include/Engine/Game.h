@@ -9,6 +9,10 @@
 #include <glm/glm.hpp>
 #include <memory>
 
+#ifdef ENGINE_DEV_MODE
+#include "Core/ProfilerOverlay.h"
+#endif
+
 namespace Engine {
 
 class Game {
@@ -28,12 +32,18 @@ private:
     Timer timer;
     Input input;
 
-    glm::vec2 lastPlayerPos; // Önceki pozisyonu sakla
-    float speed = 300.0f;    // Hareket hızı (piksel
+    glm::vec2 lastPlayerPos; 
+    float speed = 300.0f;    
 
     void processInput(double dt);
     void update(double dt);
     void render();
+#ifdef ENGINE_DEV_MODE
+    Profiler profiler;
+    ProfilerOverlay profilerOverlay;
+#endif
+
+    
 };
 
-} // namespace Engine
+} 
