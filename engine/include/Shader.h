@@ -9,6 +9,7 @@ public:
 
     void use() const;
     GLuint getID() const { return ID; }
+    
 
 private:
     GLuint ID;

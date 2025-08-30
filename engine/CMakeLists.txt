@@ -23,6 +23,7 @@ set(SOURCES
     src/Texture.cpp
     src/Sprite.cpp
     src/Game.cpp
+    src/Collision.cpp
 )
 
 add_executable(engine ${SOURCES})
