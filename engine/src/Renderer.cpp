@@ -7,28 +7,24 @@ Renderer::Renderer() {
          0.0f,  0.5f, 0.0f
     };
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    VAO.bind();
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    VBO.bind(GL_ARRAY_BUFFER);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), reinterpret_cast<void*>(0));
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    VBO.unbind(GL_ARRAY_BUFFER);
+    VAO.unbind();
 }
 
 Renderer::~Renderer() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    // RAII will clean up
 }
 
 void Renderer::draw(const Shader& shader) {
     shader.use();
-    glBindVertexArray(VAO);
+    VAO.bind();
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }

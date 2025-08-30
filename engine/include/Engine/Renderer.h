@@ -1,6 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 #include "Shader.h"
+#include "GLUtils.h"
 
 class Renderer {
 public:
@@ -10,5 +11,6 @@ public:
     void draw(const Shader& shader);
 
 private:
-    GLuint VAO, VBO;
+    GLVertexArray VAO;
+    GLBuffer VBO;
 };

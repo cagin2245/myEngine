@@ -1,4 +1,5 @@
 #include "Core/Profiler.h"
+#include "Core/Logger.h"
 
 namespace Engine {
 
@@ -6,19 +7,19 @@ void Profiler::beginSession(const std::string& name) {
     active = true;
     sessionName = name;
 #ifdef ENGINE_DEV_MODE
-    std::cout << "[Profiler] Session started: " << name << std::endl;
+    Engine::Logger::log(std::string("[Profiler] Session started: ") + name, Engine::LogLevel::Info);
 #endif
 }
 
 void Profiler::endSession() {
     active = false;
-    std::cout << "[Profiler] Session ended: " << sessionName << std::endl;
+    Engine::Logger::log(std::string("[Profiler] Session ended: ") + sessionName, Engine::LogLevel::Info);
 }
 
 void Profiler::logResult(const ProfileResult& result) {
     if (active) {
         auto duration = (result.end - result.start) / 1000.0; // microseconds -> ms
-        std::cout << "[Profiler] " << result.name << " took " << duration << " ms" << std::endl;
+    Engine::Logger::log(std::string("[Profiler] ") + result.name + " took " + std::to_string(duration) + " ms", Engine::LogLevel::Info);
     }
 }
 

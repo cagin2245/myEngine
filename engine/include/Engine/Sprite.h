@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include <glm/glm.hpp>
 #include  <memory>
+#include "GLUtils.h"
 
 class Sprite
 {
@@ -30,7 +31,7 @@ public:
     glm::vec2 getPosition() const { return position; }
     glm::vec2 getSize() const { return size; }
     float getRotation() const { return 0.0f; /* Implement if needed */ }
-    std::shared_ptr<Texture> getTexture() const { return texture; }
+    std::shared_ptr<Texture> getTexture() const { return texture.lock(); }
     glm::vec4 getColor() const { return glm::vec4(1.0f); /* Implement if needed */ }
     glm::vec4 getTexCoords() const { return glm::vec4(0.0f); /* Implement if needed */ }
     bool isVisible() const { return true; /* Implement if needed */ }
@@ -40,11 +41,12 @@ public:
         // x, y, w, h
         }
     private:
-        std::shared_ptr<Texture> texture;
+    std::weak_ptr<Texture> texture;
         glm::vec2 position;
         glm::vec2 size;
         
-        GLuint VAO, VBO;
+    GLVertexArray VAO;
+    GLBuffer VBO;
         float rotation = 0.0f;
         
 

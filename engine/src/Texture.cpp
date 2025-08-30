@@ -1,5 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "Texture.h"
+#include "Core/Logger.h"
 #include <stb_image.h>
 #include <iostream>
 
@@ -8,12 +9,12 @@ Texture::Texture(const std::string& path) {
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
     #ifdef ENGINE_DEV_MODE
-    std::cout << "Texture load: " << path << " | w: " << width << ", h: " << height << ", ch: " << channels << ", data: " << (void*)data << std::endl;
+    Engine::Logger::log(std::string("Texture load: ") + path + " | w: " + std::to_string(width) + ", h: " + std::to_string(height) + ", ch: " + std::to_string(channels), Engine::LogLevel::Debug);
     #endif
     if (!data) {
-        #ifdef ENGINE_DEV_MODE
-        std::cerr << "Failed to load texture: " << path << std::endl;
-        #endif
+    #ifdef ENGINE_DEV_MODE
+    Engine::Logger::log(std::string("Failed to load texture: ") + path, Engine::LogLevel::Error);
+    #endif
         id = 0;
         return;
     }
@@ -31,7 +32,7 @@ Texture::Texture(const std::string& path) {
     GLenum format = GL_RGB;
     if (channels == 4) format = GL_RGBA;
     #ifdef ENGINE_DEV_MODE
-    std::cout << "Texture load: " << path << " | w: " << width << ", h: " << height << ", ch: " << channels << ", format: " << (format == GL_RGB ? "GL_RGB" : "GL_RGBA") << std::endl;
+    Engine::Logger::log(std::string("Texture load: ") + path + " | w: " + std::to_string(width) + ", h: " + std::to_string(height) + ", ch: " + std::to_string(channels) + ", format: " + (format == GL_RGB ? "GL_RGB" : "GL_RGBA"), Engine::LogLevel::Debug);
     #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0,
@@ -42,7 +43,7 @@ Texture::Texture(const std::string& path) {
 }
 
 Texture::~Texture() {
-    glDeleteTextures(1, &id);
+    if (id != 0) glDeleteTextures(1, &id);
 }
 
 void Texture::bind(unsigned int slot) const {
@@ -52,4 +53,22 @@ void Texture::bind(unsigned int slot) const {
 
 void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Texture::Texture(Texture&& other) noexcept
+    : id(other.id), width(other.width), height(other.height), channels(other.channels)
+{
+    other.id = 0;
+    other.width = other.height = other.channels = 0;
+}
+
+Texture& Texture::operator=(Texture&& other) noexcept {
+    if (this != &other) {
+        if (id != 0) glDeleteTextures(1, &id);
+        id = other.id;
+        width = other.width; height = other.height; channels = other.channels;
+        other.id = 0;
+        other.width = other.height = other.channels = 0;
+    }
+    return *this;
 }

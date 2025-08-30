@@ -23,6 +23,7 @@ namespace Engine
         void endFrame();
 
         double getLastFrameMs() const { return lastFrameMs; }
+        
         double getAvgFrameMs() const { return avgFrameMs; }
         double getMinFrameMs() const { return minFrameMs; }
         double getMaxFrameMs() const { return maxFrameMs; }
@@ -64,6 +65,7 @@ namespace Engine
     private:
         std::string name;
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
+        
         bool stopped = false;
         void stop();
     };

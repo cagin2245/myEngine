@@ -1,32 +1,42 @@
 #include <glad/glad.h>
 
 #include "Core/Profiler.h"
+#include "Core/MemoryTracker.h"
+#include "Core/TextRenderer.h"
 #include "ResourceManager.h"
 #include "Game.h"
+#include "Core/Logger.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <algorithm>
 
 namespace Engine
 {
-    // ...existing code...
+#// ...existing code...
     Game::Game(int width, int height)
         : width(width), height(height),
           window("Engine - Clean Collision", width, height)
 #ifdef ENGINE_DEV_MODE
-        , profiler()
-        , profilerOverlay(profiler)
+          ,
+          profiler()
 #endif
     {
 #ifdef ENGINE_DEV_MODE
-        std::cout << "DEV MODE" << std::endl;
-        
+        // textRenderer is a shared_ptr in the header; create it here and then
+        // construct the profiler overlay which expects a reference + shared_ptr
+        textRenderer = std::make_shared<TextRenderer>(width, height);
+        textRenderer->load("assets/fonts/arial.ttf", 24);
+        profilerOverlay = std::make_unique<ProfilerOverlay>(profiler, textRenderer);
+#endif
+#ifdef ENGINE_DEV_MODE
+    Engine::Logger::log("DEV MODE", Engine::LogLevel::Debug);
+
 #endif
         shader = ResourceManager::LoadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
         playerTexture = ResourceManager::LoadTexture("assets/textures/player.png", "player");
         enemyTexture = ResourceManager::LoadTexture("assets/textures/enemy.png", "enemy");
-        player = std::make_shared<Sprite>(playerTexture, glm::vec2{200.0f, 200.0f}, glm::vec2{64.0f, 64.0f});
-        enemy = std::make_shared<Sprite>(enemyTexture, glm::vec2{400.0f, 300.0f}, glm::vec2{64.0f, 64.0f});
+    player = std::make_unique<Sprite>(playerTexture, glm::vec2{200.0f, 200.0f}, glm::vec2{64.0f, 64.0f});
+    enemy = std::make_unique<Sprite>(enemyTexture, glm::vec2{400.0f, 300.0f}, glm::vec2{64.0f, 64.0f});
         projection = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1.0f, 1.0f);
     }
 
@@ -75,35 +85,37 @@ namespace Engine
 
     void Game::render()
     {
-        PROFILE_FUNCTION();
+        glEnable(GL_BLEND);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glViewport(0, 0, width, height);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glClear(GL_COLOR_BUFFER_BIT);
-#ifdef ENGINE_DEV_MODE
-        profilerOverlay.render();
-#endif
+        // NOTE: profiler overlay will be rendered after scene objects so it appears on top
 
         if (!shader)
         {
-            std::cerr << "[render] Shader pointer null!" << std::endl;
+            Engine::Logger::log("[render] Shader pointer null!", Engine::LogLevel::Error);
         }
         if (!playerTexture)
         {
-            std::cerr << "[render] Player texture pointer null!" << std::endl;
+            Engine::Logger::log("[render] Player texture pointer null!", Engine::LogLevel::Error);
         }
         if (!enemyTexture)
         {
-            std::cerr << "[render] Enemy texture pointer null!" << std::endl;
+            Engine::Logger::log("[render] Enemy texture pointer null!", Engine::LogLevel::Error);
         }
         if (!player)
         {
-            std::cerr << "[render] Player sprite pointer null!" << std::endl;
+            Engine::Logger::log("[render] Player sprite pointer null!", Engine::LogLevel::Error);
         }
         if (!enemy)
         {
-            std::cerr << "[render] Enemy sprite pointer null!" << std::endl;
+            Engine::Logger::log("[render] Enemy sprite pointer null!", Engine::LogLevel::Error);
         }
 
         if (shader && player)
@@ -119,6 +131,18 @@ namespace Engine
         if (shader && enemy)
             enemy->draw(*shader, projection);
 
+#ifdef ENGINE_DEV_MODE
+        // Draw profiler overlay after scene so it appears on top
+        if (profilerOverlay)
+        {
+            // Ensure overlay draws above everything
+            glDisable(GL_DEPTH_TEST);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            profilerOverlay->render(10,30);
+        }
+#endif
+
         window.swapBuffers();
     }
 
@@ -126,11 +150,15 @@ namespace Engine
     {
         while (window.isRunning())
         {
+            profiler.beginFrame();
             window.pollEvents();
+
             double dt = timer.getDeltaTime();
             processInput(dt);
             update(dt);
             render();
+
+            profiler.endFrame();
         }
     }
 

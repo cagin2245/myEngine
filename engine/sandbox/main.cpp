@@ -1,6 +1,6 @@
-#include <iostream>
+#include "Core/Logger.h"
 
 int main() {
-    std::cout << "Hello, Sandbox Engine!" << std::endl;
+    Engine::Logger::log("Hello, Sandbox Engine!", Engine::LogLevel::Info);
     return 0;
 }

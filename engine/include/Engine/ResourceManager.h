@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <memory>
 #include "Texture.h"
 #include "Shader.h"
@@ -8,8 +9,8 @@
 class ResourceManager {
 public:
     // Yüklenen tüm shaderlar ve texturelar burada tutulur
-    static std::map<std::string, std::shared_ptr<Shader>>    Shaders;
-    static std::map<std::string, std::shared_ptr<Texture>>   Textures;
+    static std::unordered_map<std::string, std::shared_ptr<Shader>>    Shaders;
+    static std::unordered_map<std::string, std::shared_ptr<Texture>>   Textures;
 
     // Shader yükle ve sakla
     static std::shared_ptr<Shader> LoadShader(const std::string& vShaderFile, const std::string& fShaderFile, const std::string& name);
