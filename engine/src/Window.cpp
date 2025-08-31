@@ -4,9 +4,11 @@
 #include "Core/Logger.h"
 #include <iostream>
 
+namespace Engine {
+
 Window::Window(const char* title, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    Engine::Logger::log(std::string("SDL init failed: ") + SDL_GetError(), Engine::LogLevel::Error);
+        Logger::log(std::string("SDL init failed: ") + SDL_GetError(), LogLevel::Error);
         running = false;
         return;
     }
@@ -20,28 +22,28 @@ Window::Window(const char* title, int width, int height) {
                               width, height,
                               SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     if (!window) {
-    Engine::Logger::log(std::string("Window creation failed: ") + SDL_GetError(), Engine::LogLevel::Error);
+        Logger::log(std::string("Window creation failed: ") + SDL_GetError(), LogLevel::Error);
         running = false;
         return;
     }
 
     context = SDL_GL_CreateContext(window);
     if (!context) {
-    Engine::Logger::log(std::string("OpenGL context failed: ") + SDL_GetError(), Engine::LogLevel::Error);
+        Logger::log(std::string("OpenGL context failed: ") + SDL_GetError(), LogLevel::Error);
         running = false;
         return;
     }
 
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
-    Engine::Logger::log("Failed to initialize GLAD", Engine::LogLevel::Error);
+        Logger::log("Failed to initialize GLAD", LogLevel::Error);
         running = false;
         return;
     }
 
-    
-    #ifdef ENGINE_DEV_MODE
-    Engine::Logger::log(std::string("OpenGL Version: ") + reinterpret_cast<const char*>(glGetString(GL_VERSION)), Engine::LogLevel::Info);
-    #endif
+    SDL_GL_SetSwapInterval(1);
+#ifdef ENGINE_DEV_MODE
+    Logger::log(std::string("OpenGL Version: ") + reinterpret_cast<const char*>(glGetString(GL_VERSION)), LogLevel::Info);
+#endif
 }
 
 Window::~Window() {
@@ -72,3 +74,5 @@ int Window::getHeight() const {
     SDL_GetWindowSize(window, nullptr, &h);
     return h;
 }
+
+} // namespace Engine

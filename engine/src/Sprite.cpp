@@ -4,6 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>          // value_ptr
 #include <iostream>
 
+namespace Engine {
 
 Sprite::Sprite(std::shared_ptr<Texture> texture, glm::vec2 position, glm::vec2 size)
     : texture(texture), position(position), size(size) 
@@ -62,12 +63,11 @@ void Sprite::initRenderData() {
 
 
 
-
 void Sprite::draw(Shader& shader, const glm::mat4& projection) {
     // Null kontrolü: weak_ptr'i lock et
     auto tex = texture.lock();
     if (!tex) {
-        Engine::Logger::log("[Sprite::draw] Texture pointer null!", Engine::LogLevel::Error);
+        Logger::log("[Sprite::draw] Texture pointer null!", LogLevel::Error);
         return;
     }
     shader.use();
@@ -98,3 +98,5 @@ void Sprite::draw(Shader& shader, const glm::mat4& projection) {
 void Sprite::setRotation(float angle) {
     rotation = angle;
 }
+
+} // namespace Engine

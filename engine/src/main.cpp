@@ -3,9 +3,8 @@
 #include "Core/Profiler.h"
 #include "Game.h"
 
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
-
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 int main() {
     Engine::Profiler::beginSession("Main Session");
     

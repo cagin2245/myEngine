@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 
+namespace Engine {
 class Timer {
 public:
     Timer() {
@@ -17,3 +18,4 @@ public:
 private:
     Uint64 last;
 };
+}

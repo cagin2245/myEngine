@@ -2,6 +2,7 @@
 #include <string>
 #include <glad/glad.h>
 
+namespace Engine {
 class Texture {
 public:
     Texture(const std::string& path);
@@ -23,3 +24,4 @@ private:
     GLuint id;
     int width, height, channels;
 };
+}

@@ -6,6 +6,8 @@
 #include "Texture.h"
 #include "Shader.h"
 
+namespace Engine {
+
 class ResourceManager {
 public:
     // Yüklenen tüm shaderlar ve texturelar burada tutulur
@@ -26,3 +28,4 @@ public:
 private:
     ResourceManager() { }
 };
+}

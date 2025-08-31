@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "GLUtils.h"
 
+namespace Engine {
 class Renderer {
 public:
     Renderer();
@@ -14,3 +15,5 @@ private:
     GLVertexArray VAO;
     GLBuffer VBO;
 };
+
+}

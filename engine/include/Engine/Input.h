@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 
+namespace Engine {
 class Input {
 public:
     void update() {
@@ -15,3 +16,4 @@ public:
 private:
     const Uint8* state = nullptr;
 };
+}

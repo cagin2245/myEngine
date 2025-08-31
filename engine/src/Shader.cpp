@@ -6,6 +6,8 @@
 #include <sstream>
 #include "Core/Logger.h"
 
+namespace Engine {
+
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
     std::string vCode = loadSource(vertexPath);
     std::string fCode = loadSource(fragmentPath);
@@ -24,7 +26,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
         char infoLog[512];
         glGetProgramInfoLog(ID, 512, nullptr, infoLog);
 #ifdef ENGINE_DEV_MODE
-    Engine::Logger::log(std::string("Shader link error:\n") + infoLog, Engine::LogLevel::Error);
+        Logger::log(std::string("Shader link error:\n") + infoLog, LogLevel::Error);
 #endif
     }
 
@@ -74,7 +76,7 @@ GLuint Shader::compileShader(GLenum type, const std::string& source) {
         char infoLog[512];
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
 #ifdef ENGINE_DEV_MODE
-    Engine::Logger::log(std::string("Shader compile error:\n") + infoLog, Engine::LogLevel::Error);
+        Logger::log(std::string("Shader compile error:\n") + infoLog, LogLevel::Error);
 #endif
     }
     return shader;
@@ -90,3 +92,5 @@ void Shader::setVec3(const std::string& name, const glm::vec3& value) const {
     GLint loc = glGetUniformLocation(ID, name.c_str());
     glUniform3fv(loc, 1, glm::value_ptr(value));
 }
+
+} // namespace Engine

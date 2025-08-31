@@ -1,6 +1,9 @@
 #include "GLUtils.h"
 #include <glad/glad.h>
 
+
+
+
 GLVertexArray::GLVertexArray() {
     glGenVertexArrays(1, &id);
 }

@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+namespace Engine {
+
 Renderer::Renderer() {
     float vertices[] = {
         -0.5f, -0.5f, 0.0f,
@@ -28,3 +30,5 @@ void Renderer::draw(const Shader& shader) {
     VAO.bind();
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
+
+} // namespace Engine

@@ -1,11 +1,9 @@
 #pragma once
 
-#pragma once
+#include <SDL2/SDL.h>
 
-// SDL forward declarations
-struct SDL_Window;
-typedef void* SDL_GLContext;
 
+namespace Engine {
 class Window {
 public:
     Window(const char* title, int width, int height);
@@ -25,3 +23,4 @@ private:
 public:
     inline bool isRunning() const { return running; }
 };
+}

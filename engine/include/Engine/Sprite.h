@@ -5,6 +5,8 @@
 #include  <memory>
 #include "GLUtils.h"
 
+
+namespace Engine {
 class Sprite
 {
 public:
@@ -52,3 +54,4 @@ public:
 
         void initRenderData();
     };
+}

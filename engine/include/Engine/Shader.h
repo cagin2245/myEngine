@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <string>
 
+namespace Engine {
 class Shader {
 public:
     Shader(const std::string& vertexPath, const std::string& fragmentPath);
@@ -26,3 +27,4 @@ private:
     std::string loadSource(const std::string& path);
     GLuint compileShader(GLenum type, const std::string& source);
 };
+}
