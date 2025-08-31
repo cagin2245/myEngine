@@ -13,9 +13,9 @@
 namespace Engine
 {
 #// ...existing code...
-        Game::Game(int width, int height)
-                : width(width), height(height), resolution{width, height},
-                    window("Engine - Clean Collision", width, height)
+    Game::Game(int width, int height, int virtualWidth, int virtualHeight)
+        : width(width), height(height), window("Engine - Clean Collision", width, height),
+          virtualWidth(virtualWidth), virtualHeight(virtualHeight), resolution{width, height}
 #ifdef ENGINE_DEV_MODE
           ,
           profiler()
@@ -29,14 +29,14 @@ namespace Engine
         profilerOverlay = std::make_unique<ProfilerOverlay>(profiler, textRenderer);
 #endif
 #ifdef ENGINE_DEV_MODE
-    Engine::Logger::log("DEV MODE", Engine::LogLevel::Debug);
+        Engine::Logger::log("DEV MODE", Engine::LogLevel::Debug);
 
 #endif
         shader = ResourceManager::LoadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
         playerTexture = ResourceManager::LoadTexture("assets/textures/player.png", "player");
         enemyTexture = ResourceManager::LoadTexture("assets/textures/enemy.png", "enemy");
-    player = std::make_unique<Sprite>(playerTexture, glm::vec2{200.0f, 200.0f}, glm::vec2{64.0f, 64.0f});
-    enemy = std::make_unique<Sprite>(enemyTexture, glm::vec2{400.0f, 300.0f}, glm::vec2{64.0f, 64.0f});
+        player = std::make_unique<Sprite>(playerTexture, glm::vec2{200.0f, 200.0f}, glm::vec2{64.0f, 64.0f});
+        enemy = std::make_unique<Sprite>(enemyTexture, glm::vec2{400.0f, 300.0f}, glm::vec2{64.0f, 64.0f});
         projection = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1.0f, 1.0f);
     }
 
@@ -85,15 +85,34 @@ namespace Engine
 
     void Game::render()
     {
-        glEnable(GL_BLEND);
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
+        glViewport(0, 0, width, height);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glViewport(0, 0, width, height);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        float targetAspect = (float)virtualWidth / (float)virtualHeight;
+        float windowAspect = (float)window.getWidth() / (float)window.getHeight();
 
+        int viewportWidth, viewportHeight;
+        if (windowAspect > targetAspect)
+        {
+            // Pencere daha geniş, yatay siyah çubuklar
+            viewportHeight = height;
+            viewportWidth = static_cast<int>(viewportHeight * targetAspect);
+        }
+        else
+        {
+            // Pencere daha dar, dikey siyah çubuklar
+            viewportWidth = width;
+            viewportHeight = static_cast<int>(static_cast<float>(viewportWidth) / targetAspect);
+        }
+
+        int vpX = (width - viewportWidth) / 2;
+        int vpY = (height - viewportHeight) / 2;
+
+        glViewport(vpX, vpY, viewportWidth, viewportHeight);
+
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         // NOTE: profiler overlay will be rendered after scene objects so it appears on top
 
@@ -133,13 +152,13 @@ namespace Engine
 
 #ifdef ENGINE_DEV_MODE
         // Draw profiler overlay after scene so it appears on top
-    if (profilerOverlay)
+        if (profilerOverlay)
         {
             // Ensure overlay draws above everything
             glDisable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            profilerOverlay->render(10,30, resolution);
+            profilerOverlay->render(10, 30, resolution);
         }
 #endif
 

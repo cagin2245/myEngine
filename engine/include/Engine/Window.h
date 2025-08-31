@@ -14,6 +14,8 @@ public:
     void swapBuffers();
     bool shouldClose();
     void pollEvents();
+    int getWidth() const;
+    int getHeight() const;
 
 private:
     SDL_Window* window;

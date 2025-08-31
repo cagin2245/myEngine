@@ -21,7 +21,7 @@ namespace Engine
     class Game
     {
     public:
-        Game(int width, int height);
+    Game(int width, int height, int virtualWidth = 800, int virtualHeight = 600);
         void run();
 
     private:
@@ -31,6 +31,8 @@ namespace Engine
         std::shared_ptr<Texture> playerTexture;
         std::shared_ptr<Texture> enemyTexture;
         std::unique_ptr<Sprite> player;
+    int virtualWidth = 800;
+    int virtualHeight = 600;
     std::array<int, 2> resolution;
     std::unique_ptr<Sprite> enemy;
     glm::mat4 projection;
