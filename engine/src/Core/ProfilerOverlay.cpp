@@ -7,7 +7,7 @@ namespace Engine
     ProfilerOverlay::ProfilerOverlay(Profiler &profiler, std::shared_ptr<TextRenderer> textRenderer)
         : profiler(profiler), textRenderer(std::move(textRenderer)) {}
 
-    void ProfilerOverlay::render(int x, int y)
+    void ProfilerOverlay::render(int x, int y, std::array<int, 2> resolution)
     {
 #ifdef ENGINE_DEV_MODE
         std::stringstream ss;
@@ -17,7 +17,7 @@ namespace Engine
 
         textRenderer->renderText(ss.str(), (float)x, (float)y, 1.0f, glm::vec3(1.0f, 1.0f, 0.0f));
         std::string mem = "Memory: " + MemoryTracker::getCurrentUsageMB();
-        textRenderer->renderText(mem, (float)x, (float)(y + 20), 1.0f, glm::vec3(0.5f, 1.0f, 0.5f));
+        textRenderer->renderText(mem, (float)x, (float)(y - 24), 0.5f, glm::vec3(0.5f, 1.0f, 0.5f));
 #endif
     }
 

@@ -8,6 +8,7 @@
 #include "Input.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <array>
 
 #ifdef ENGINE_DEV_MODE
 #include "Core/ProfilerOverlay.h"
@@ -30,6 +31,7 @@ namespace Engine
         std::shared_ptr<Texture> playerTexture;
         std::shared_ptr<Texture> enemyTexture;
         std::unique_ptr<Sprite> player;
+    std::array<int, 2> resolution;
     std::unique_ptr<Sprite> enemy;
     glm::mat4 projection;
         Timer timer;
@@ -40,7 +42,7 @@ namespace Engine
 
         void processInput(double dt);
         void update(double dt);
-        void render();
+    void render();
 
     #ifdef ENGINE_DEV_MODE
             Profiler profiler;

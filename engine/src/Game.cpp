@@ -13,9 +13,9 @@
 namespace Engine
 {
 #// ...existing code...
-    Game::Game(int width, int height)
-        : width(width), height(height),
-          window("Engine - Clean Collision", width, height)
+        Game::Game(int width, int height)
+                : width(width), height(height), resolution{width, height},
+                    window("Engine - Clean Collision", width, height)
 #ifdef ENGINE_DEV_MODE
           ,
           profiler()
@@ -133,13 +133,13 @@ namespace Engine
 
 #ifdef ENGINE_DEV_MODE
         // Draw profiler overlay after scene so it appears on top
-        if (profilerOverlay)
+    if (profilerOverlay)
         {
             // Ensure overlay draws above everything
             glDisable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            profilerOverlay->render(10,30);
+            profilerOverlay->render(10,30, resolution);
         }
 #endif
 
